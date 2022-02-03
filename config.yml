@@ -1,0 +1,4 @@
+output:
+  folder_name: "output"
+source:
+  address: "https://id.wikipedia.org/wiki/Aksi_2_Desember"
