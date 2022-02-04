@@ -29,6 +29,11 @@ def delete_output_folder(output_folder):
                     os.remove(os.path.join(
                         output_folder, 'images', image))
                 os.rmdir(os.path.join(output_folder, 'images'))
+            if 'css' in list_dir:
+                for css in os.listdir(os.path.join(output_folder, 'css')):
+                    os.remove(os.path.join(
+                        output_folder, 'css', css))
+                os.rmdir(os.path.join(output_folder, 'css'))
 
         # Remove Files
         for file in list_dir:
@@ -43,7 +48,9 @@ def folder_init(output_folder):
     if not output_folder in os.listdir(os.getcwd()):
         os.mkdir(output_folder)
         os.makedirs(os.path.join(output_folder, 'images'))
+        os.makedirs(os.path.join(output_folder, 'css'))
         scrape_html(output_folder)
+        scrape_css(output_folder)
         scrape_images(output_folder)
 
 
@@ -51,6 +58,13 @@ def scrape_html(output_folder):
     output_folder = os.path.join(os.getcwd(), output_folder, resource_title)
     with open(output_folder, 'w', encoding="utf-8") as html:
         html.write(resource_html.prettify())
+
+
+def scrape_css(output_folder):
+    for style in resource_styles:
+        with open((os.path.join(os.getcwd(), output_folder, 'css', f"css{random.randint(0,10000000000)}.css")), 'w') as css:
+            css.write(str(requests.get(
+                "https://wikipedia.org" + style['href']).content))
 
 
 def scrape_images(output_folder):
