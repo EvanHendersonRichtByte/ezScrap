@@ -1,9 +1,9 @@
 import random
 import requests
-from bs4 import BeautifulSoup
 import yaml
 import os
-
+import pdb
+from bs4 import BeautifulSoup
 
 with open("config.yml", "r") as cfgfile:
     cfg = yaml.safe_load(cfgfile)
@@ -21,33 +21,35 @@ resource_styles = resource_html.select('[rel="stylesheet"]')  # list
 
 def delete_output_folder(output_folder):
     try:
-        if(os.listdir(output_folder)):
-            remaining_files = os.listdir(output_folder)
-            if(len(remaining_files) > 0):
-                for file in remaining_files:
-                    # Remove images inside images folder
-                    for image in os.listdir(os.path.join(output_folder, file)):
-                        os.remove(os.path.join(output_folder, 'images', image))
-                    # Remove Files
-                    if(len(os.listdir(os.path.join(output_folder, file))) > 0):
-                        os.remove(os.path.join(output_folder, file))
-                    # Remove Folders
-                    os.rmdir(os.path.join(output_folder, file))
+        list_dir = os.listdir(output_folder)
+        if len(list_dir) != 0:
+            # Remove images inside images folder
+            if 'images' in list_dir:
+                for image in os.listdir(os.path.join(output_folder, 'images')):
+                    os.remove(os.path.join(
+                        output_folder, 'images', image))
+                os.rmdir(os.path.join(output_folder, 'images'))
+
+        # Remove Files
+        for file in list_dir:
+            os.remove(os.path.join(output_folder, file))
         # Remove output folder
         os.rmdir(output_folder)
-
     except:
-        pass
+        print("Please re-run the program")
 
 
 def folder_init(output_folder):
-    os.mkdir(output_folder)
-    os.chdir(output_folder)
-    os.mkdir("images")
+    if not output_folder in os.listdir(os.getcwd()):
+        os.mkdir(output_folder)
+        os.makedirs(os.path.join(output_folder, 'images'))
+        scrape_html(output_folder)
+        scrape_images(output_folder)
 
 
 def scrape_html(output_folder):
-    with open((os.path.join(os.getcwd(),  resource_title)), 'w', encoding="utf-8") as html:
+    output_folder = os.path.join(os.getcwd(), output_folder, resource_title)
+    with open(output_folder, 'w', encoding="utf-8") as html:
         html.write(resource_html.prettify())
 
 
@@ -57,7 +59,7 @@ def scrape_images(output_folder):
         for number, image in enumerate(resource_images):
             if image['src'].endswith(format):
                 if not image['src'].startswith("/static"):
-                    with open((os.path.join(os.getcwd(), 'images', f"image{random.randint(0,10000000000)}{format}")), 'wb') as img:
+                    with open((os.path.join(os.getcwd(), output_folder, 'images', f"image{random.randint(0,10000000000)}{format}")), 'wb') as img:
                         img.write(requests.get(
                             f'https:{image["src"]}').content)
 
@@ -65,5 +67,3 @@ def scrape_images(output_folder):
 if __name__ == "__main__":
     delete_output_folder(output_folder)
     folder_init(output_folder)
-    scrape_html(output_folder)
-    scrape_images(output_folder)
