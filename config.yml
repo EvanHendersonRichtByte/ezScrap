@@ -1,4 +1,6 @@
 output:
   folder_name: "output"
 source:
-  address: "https://id.wikipedia.org/wiki/Aksi_2_Desember"
+  address: "https://www.nexusmods.com/skyrimspecialedition/mods/51783"
+headers:
+  header: {"user-agent": "Mozilla/5.0"}
