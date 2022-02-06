@@ -12,8 +12,7 @@ ezScrap is a web scraper tool to help you to get data from specific website, dev
 ## Features
 - perform get operation on specific site
 
-## Upcoming Features
-- scrape script
+## Planned Features
 - link html with downloaded assets
 
 ## How to use
