@@ -1,7 +1,7 @@
 # ezScrap
 ## _web scrapper that easy to use_
 
-ezScrap is a web scraper tool to help you to get data from specific website, developed using python
+ezScrap is a web scraper tool to help you to get data from a specific website, developed using python
 
 ### Libraries
 - [requests](https://pypi.org/project/requests/) - to perform http method on specific site
